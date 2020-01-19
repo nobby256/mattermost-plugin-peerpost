@@ -10,6 +10,15 @@
             "request": "attach",
             "mode": "local",
             "processId": "${input:processId}"
+        },
+        {
+            "name": "Make New manifest.go",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/build/manifest/main.go",
+            "args": ["apply"],
+            "cwd": "${workspaceFolder}"
         }
     ],
     //wait-for-process extensionを利用
