@@ -13,7 +13,7 @@ type peerPostUsecase struct {
 }
 
 const (
-	commandUsage = "** ピア投稿 Slash Command Help **\n\n  /peer @ユーザ名\n\n  - 自身は指定できません。\n\n  - 複数人を指すメンションは指定できません。（ex: @all, @channel, @here）\n\n  - チーム内のメンバーのみ指定できます。"
+	commandPeerUsage = "** ピア投稿 Slash Command Help **\n\n  /peer @ユーザ名\n\n  - 自身は指定できません。\n\n  - 複数人を指すメンションは指定できません。（ex: @all, @channel, @here）\n\n  - チーム内のメンバーのみ指定できます。"
 )
 const (
 	dialogElementText     = "text"
@@ -27,7 +27,7 @@ func (p *peerPostUsecase) execute(args *model.CommandArgs) (*model.CommandRespon
 
 	fields := strings.Fields(args.Command)
 	if len(fields) != 2 {
-		return p.createErrorCommandResponse(commandUsage), nil
+		return p.plugin.createErrorCommandResponse(commandPeerUsage), nil
 	}
 
 	//メンションを取得
@@ -36,9 +36,9 @@ func (p *peerPostUsecase) execute(args *model.CommandArgs) (*model.CommandRespon
 	//メンションからユーザ名を取得
 	var userName string
 	if !strings.HasPrefix(mention, "@") {
-		return p.createErrorCommandResponse(commandUsage), nil
+		return p.plugin.createErrorCommandResponse(commandPeerUsage), nil
 	} else if "@all" == mention || "@channel" == mention || "@here" == mention {
-		return p.createErrorCommandResponse(commandUsage), nil
+		return p.plugin.createErrorCommandResponse(commandPeerUsage), nil
 	} else {
 		userName = string([]rune(mention))[1:]
 	}
@@ -48,15 +48,15 @@ func (p *peerPostUsecase) execute(args *model.CommandArgs) (*model.CommandRespon
 	if users, err := p.plugin.API.GetUsersByUsernames([]string{userName}); err != nil {
 		return nil, err
 	} else if len(users) == 0 {
-		errorMessage := fmt.Sprintf("該当ユーザーを見つけることができませんでした。（%s）\n\n%s", mention, commandUsage)
-		return p.createErrorCommandResponse(errorMessage), nil
+		errorMessage := fmt.Sprintf("該当ユーザーを見つけることができませんでした。（%s）\n\n%s", mention, commandPeerUsage)
+		return p.plugin.createErrorCommandResponse(errorMessage), nil
 	} else if len(users) > 1 {
-		errorMessage := fmt.Sprintf("ユーザーを一人に絞り込むことが出来ませんでした。（%s）\n\n%s", mention, commandUsage)
-		return p.createErrorCommandResponse(errorMessage), nil
+		errorMessage := fmt.Sprintf("ユーザーを一人に絞り込むことが出来ませんでした。（%s）\n\n%s", mention, commandPeerUsage)
+		return p.plugin.createErrorCommandResponse(errorMessage), nil
 	} else {
 		targetUser = *users[0]
 		if targetUser.Id == args.UserId {
-			return p.createErrorCommandResponse("自身を指定することはできません。"), nil
+			return p.plugin.createErrorCommandResponse("自身を指定することはできません。"), nil
 		}
 	}
 
@@ -67,15 +67,6 @@ func (p *peerPostUsecase) execute(args *model.CommandArgs) (*model.CommandRespon
 	}
 
 	return &model.CommandResponse{}, nil
-}
-
-func (p *peerPostUsecase) createErrorCommandResponse(errorMessage string) *model.CommandResponse {
-	return &model.CommandResponse{
-		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-		Text:         errorMessage,
-		Username:     p.plugin.getBotDisplayName(),
-		IconURL:      p.plugin.getBotImageURL(),
-	}
 }
 
 func (p *peerPostUsecase) createDialogRequest(triggerID string, targetUser model.User) model.OpenDialogRequest {
@@ -177,6 +168,7 @@ func (p *peerPostUsecase) handleDialogCallback(w http.ResponseWriter, r *http.Re
 		UserId: configuration.bot.UserId,
 		Props: model.StringInterface{
 			"hashtags": hashtags,
+			"from-to":  request.UserId + " " + targetUserID,
 			"attachments": []*model.SlackAttachment{{
 				AuthorName: createUser.GetDisplayName(model.SHOW_NICKNAME_FULLNAME),
 				AuthorIcon: p.plugin.getUserProfileImageURL(createUser.Id),
@@ -234,8 +226,8 @@ func (p *peerPostUsecase) createStampOptions() []*model.PostActionOptions {
 		{Text: "それな", Value: "/stamp/stamp_5.png"},
 		{Text: "天才", Value: "/stamp/stamp_6.png"},
 		{Text: "つよつよ", Value: "/stamp/stamp_7.png"},
-		{Text: "わかる", Value: "/stamp/stamp_7.png"},
-		{Text: "GJ", Value: "/stamp/stamp_8.png"},
+		{Text: "わかる", Value: "/stamp/stamp_8.png"},
+		{Text: "GJ", Value: "/stamp/stamp_9.png"},
 		{Text: "いいね", Value: "/stamp/stamp_10.png"},
 		{Text: "優秀", Value: "/stamp/stamp_11.png"},
 		{Text: "がんばれ", Value: "/stamp/stamp_12.png"},

@@ -32,6 +32,15 @@ func (p *Plugin) waitForDebuggerAttach() {
 	p.run = true
 }
 
+func (p *Plugin) createErrorCommandResponse(errorMessage string) *model.CommandResponse {
+	return &model.CommandResponse{
+		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+		Text:         errorMessage,
+		Username:     p.getBotDisplayName(),
+		IconURL:      p.getBotImageURL(),
+	}
+}
+
 func (p *Plugin) getUserProfileImageURL(userID string) string {
 	siteURL := p.API.GetConfig().ServiceSettings.SiteURL
 	userProfileImageURL := fmt.Sprintf("%s/api/v4/users/%s/image? =0", *siteURL, userID)
