@@ -1,0 +1,28 @@
+{
+    "id": "peerpost",
+    "name": "Peer Post",
+    "description": "ピア投稿プラグイン.",
+    "version": "1.0.0",
+    "min_server_version": "5.18.0",
+    "server": {
+        "executables": {
+            "linux-amd64": "server/dist/peerpost-plugin-linux-amd64",
+            "darwin-amd64": "server/dist/peerpost-plugin-darwin-amd64",
+            "windows-amd64": "server/dist/peerpost-plugin-windows-amd64.exe"
+        }
+    },
+    "settings_schema": {
+        "header": "ピア投稿プラグインの設定",
+        "footer": "",
+        "settings": [
+        {
+            "key": "ChannelName",
+            "display_name": "Channel Name",
+            "type": "text",
+            "help_text": "ピア投稿がポストされるチャンネルです。プラグインによって自動的に全てのチームに作成されます。",
+            "placeholder": "peer-post",
+            "default": "peer-post"
+        }
+        ]
+    }
+}
