@@ -136,9 +136,8 @@ func (p *peerPostUsecase) handleDialogCallback(w http.ResponseWriter, r *http.Re
 
 	text, _ := submission[dialogElementText].(string)
 	hashtags, _ := submission[dialogElementHashtag1].(string)
-	hashtags = "#" + hashtags
 	if tag, ok := submission[dialogElementHashtag2].(string); ok && tag != "" {
-		hashtags = hashtags + " #" + tag
+		hashtags = hashtags + " " + tag
 	}
 	stamp, _ := submission[dialogElementStamp].(string)
 	stamp = p.plugin.getServerHTTPURL(stamp)
@@ -251,14 +250,6 @@ func (p *peerPostUsecase) createStampOptions() []*model.PostActionOptions {
 }
 
 func (p *peerPostUsecase) createHashtagOptions() []*model.PostActionOptions {
-	return []*model.PostActionOptions{{
-		Text:  "チャレンジ",
-		Value: "チャレンジ",
-	}, {
-		Text:  "縁の下の力持ち",
-		Value: "縁の下の力持ち",
-	}, {
-		Text:  "組織の壁を超えて",
-		Value: "組織の壁を超えて",
-	}}
+	config := p.plugin.getConfiguration()
+	return config.hashtagOptions
 }

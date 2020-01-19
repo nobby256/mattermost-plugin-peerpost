@@ -69,7 +69,7 @@ func (p *peerReportUsecase) execute(args *model.CommandArgs) (*model.CommandResp
 		return nil, nil
 	}
 
-	return nil, nil
+	return &model.CommandResponse{}, nil
 }
 func (p *peerReportUsecase) addCount(countMap *map[string]int, id string) {
 	if count, ok := (*countMap)[id]; ok {

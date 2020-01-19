@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/pkg/errors"
+	"strings"
 
 	"github.com/mattermost/mattermost-server/v5/model"
 )
@@ -28,6 +29,10 @@ func (p *Plugin) OnConfigurationChange() error {
 	}
 
 	if error := p.ensureChannels(configuration); error != nil {
+		return error
+	}
+
+	if error := p.readHashtags(configuration); error != nil {
 		return error
 	}
 
@@ -83,6 +88,28 @@ func (p *Plugin) ensureChannels(configuration *configuration) error {
 		channelIds[team.Id] = channel.Id
 	}
 	configuration.channelIds = channelIds
+
+	return nil
+}
+func (p *Plugin) readHashtags(configuration *configuration) error {
+	configuration.hashtagOptions = []*model.PostActionOptions{}
+
+	if configuration.Hashtags == "" {
+		return errors.New("チームハッシュタグは必須入力です。")
+	}
+	tags := strings.Split(configuration.Hashtags, "\n")
+	for _, tag := range tags {
+		if tag == "" {
+			continue //空行はスキップ
+		}
+		tag = strings.ReplaceAll(tag, " ", "") //スペースを削除
+		tag = strings.ReplaceAll(tag, "#", "") //#を削除
+		//追加
+		configuration.hashtagOptions = append(configuration.hashtagOptions, &model.PostActionOptions{
+			Text:  "#" + tag,
+			Value: "#" + tag,
+		})
+	}
 
 	return nil
 }

@@ -16,12 +16,12 @@
         "footer": "",
         "settings": [
         {
-            "key": "ChannelName",
-            "display_name": "Channel Name",
-            "type": "text",
-            "help_text": "ピア投稿がポストされるチャンネルです。プラグインによって自動的に全てのチームに作成されます。",
-            "placeholder": "peer-post",
-            "default": "peer-post"
+            "key": "Hashtags",
+            "display_name": "チームハッシュタグ",
+            "type": "longtext",
+            "help_text": "ハッシュタグは改行しながら１行に１つ入力してください。",
+            "placeholder": "",
+            "default": "迅速な対応\n縁の下の力持ち\n組織の壁を超えて"
         }
         ]
     }

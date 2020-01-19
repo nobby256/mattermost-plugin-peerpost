@@ -5,23 +5,35 @@ import (
 )
 
 type configuration struct {
-	ChannelName string
+	Hashtags string
 
 	channelIds map[string]string
 
 	bot *model.Bot
+
+	hashtagOptions []*model.PostActionOptions
 }
 
 func (c *configuration) Clone() *configuration {
-	channelIds := make(map[string]string)
+	var configuration = configuration{}
+
+	configuration.bot = c.bot
+
+	configuration.channelIds = make(map[string]string)
 	for key, value := range c.channelIds {
-		channelIds[key] = value
+		configuration.channelIds[key] = value
 	}
 
-	return &configuration{
-		ChannelName: c.ChannelName,
-		bot:         c.bot,
+	configuration.hashtagOptions = []*model.PostActionOptions{}
+	for _, option := range c.hashtagOptions {
+		o := model.PostActionOptions{
+			Text:  option.Text,
+			Value: option.Value,
+		}
+		configuration.hashtagOptions = append(configuration.hashtagOptions, &o)
 	}
+
+	return &configuration
 }
 
 func (p *Plugin) getConfiguration() *configuration {
