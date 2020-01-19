@@ -13,8 +13,6 @@ const (
 
 	channelName        = "peer-channel"
 	channelDisplayName = "ピア投稿部屋"
-	channelHeader      = "The channel used by the demo plugin."
-	channelPurpose     = "This channel was created by a plugin for testing."
 )
 
 func (p *Plugin) OnConfigurationChange() error {
@@ -77,8 +75,6 @@ func (p *Plugin) ensureChannels(configuration *configuration) error {
 				Type:        model.CHANNEL_OPEN,
 				DisplayName: channelDisplayName,
 				Name:        channelName,
-				Header:      channelHeader,
-				Purpose:     channelPurpose,
 			})
 			if err != nil {
 				return err
