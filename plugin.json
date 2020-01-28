@@ -2,7 +2,7 @@
     "id": "peerpost",
     "name": "Peer Post",
     "description": "ピア投稿プラグイン.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "min_server_version": "5.16.0",
     "server": {
         "executables": {
