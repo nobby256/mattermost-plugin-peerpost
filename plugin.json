@@ -3,7 +3,7 @@
     "name": "Peer Post",
     "description": "ピア投稿プラグイン.",
     "version": "1.0.0",
-    "min_server_version": "5.18.0",
+    "min_server_version": "5.16.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/peerpost-plugin-linux-amd64",
